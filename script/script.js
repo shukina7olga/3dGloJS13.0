@@ -1,75 +1,48 @@
 window.addEventListener('DOMContentLoaded', () => {
     // eslint-disable-next-line strict
     'use strict';
-    //Timer
-    function countTimer(deadline) {
-        const timerHours = document.querySelector('#timer-hours'),
-            timerMinutes = document.querySelector('#timer-minutes'),
-            timerSeconds = document.querySelector('#timer-seconds');
 
-        function getTimeRemaining() {
-            const dateStop = new Date(deadline).getTime(), // мс от даты дедлайна
-                dateNow = new Date().getTime(), // мс от даты текущей
-                timeRemaining = (dateStop - dateNow) / 1000,
-                seconds = Math.floor(timeRemaining % 60),
-                minutes = Math.floor((timeRemaining / 60) % 60),
-                hours = Math.floor(timeRemaining / 60 / 60);
-                //days = Math.floor(timeRemaining / 60 / 60 / 24);
-            //console.log(`секунды ${seconds}    минуты ${minutes}   часы ${hours}  дни ${days}`);
-            return { timeRemaining, hours, minutes, seconds };
+    function getTime() {
+        const goodDay = document.querySelector('h2'),
+            today = document.querySelector('span'),
+            todayTime = document.querySelector('p'),
+            timeNewYear = document.querySelector('h3'),
+            dateNow = new Date(),
+            dateNewYear = new Date('1 jan 2021');
+
+        function getWeekDay(date) {
+            date = new Date();
+            const days = ['воскресенье', 'понедельник', 'вторник',
+                'среда', 'четверг', 'пятница', 'суббота'];
+            return days[date.getDay()];
         }
 
-        let count = 0;
-        function updateClock() {
-            const timer = getTimeRemaining();
-            timerHours.textContent = timer.hours;
-            timerMinutes.textContent = timer.minutes;
-            timerSeconds.textContent = timer.seconds;
-            count++;
-            console.log(count);
-            //if (timer.timeRemaining > 0) {
-            //    setTimeout(updateClock, 1000); //вызвает функцию один раз через определённый интервал
-            //}
-
-            if (timer.seconds < 10) {
-                timerSeconds.textContent = '0' + timer.seconds;
-            }
-
-            if (timer.minutes < 10) {
-                timerMinutes.textContent = '0' + timer.minutes;
-            }
-
-            if (timer.hours < 10) {
-                timerHours.textContent = '0' + timer.hours;
-            }
-
-            if (timer.timeRemaining < 0) {
-                timerHours.textContent = '00';
-                timerMinutes.textContent = '00';
-                timerSeconds.textContent = '00';
+        function getHours() {
+            const hours = dateNow.getHours();
+            if (hours <= 4) {
+                goodDay.textContent = 'Доброй ночи';
+            } else if (4 < hours <= 10) {
+                goodDay.textContent = 'Доброго утра';
+            } else if (10 < hours <= 17) {
+                goodDay.textContent += 'день';
+            } else {
+                goodDay.textContent = 'Добрый вечер';
             }
         }
-        //const setIntr = setInterval(() => { updateClock(); }, 1000);  
-        setInterval(() => {
-            if (timerHours.textContent === '00' && timerMinutes.textContent === '00' && timerSeconds.textContent === '00') {
-                //clearInterval(setIntr);
-                return;
-            }
-            updateClock();
-        }, 1000);
 
-        /*
-        let count = 0;
-        const myFunc = () => {
-            count++;
-            console.log(count);
-        };
-
-        setInterval(() => {
-            myFunc();
-        }, 1000);
-        */
-        //updateClock();
+        getHours();
+        today.textContent += getWeekDay();
+        todayTime.textContent += dateNow.toLocaleTimeString('en');
+        timeNewYear.textContent +=  Math.floor((dateNewYear - dateNow) / 1000 / 60 / 60 / 24) + ' дней';
     }
-    countTimer('06 july 2020');
+    
+    getTime();
 });
+
+
+/*
+Добрый день (утро, вечер, ночь в зависимости от времени суток)
+Сегодня: Понедельник
+Текущее время:12:05:15 PM
+До нового года осталось 175 дней
+*/
