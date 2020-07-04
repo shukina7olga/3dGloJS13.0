@@ -27,49 +27,32 @@ window.addEventListener('DOMContentLoaded', () => {
             timerSeconds.textContent = timer.seconds;
             count++;
             console.log(count);
-            //if (timer.timeRemaining > 0) {
-            //    setTimeout(updateClock, 1000); //вызвает функцию один раз через определённый интервал
-            //}
 
             if (timer.seconds < 10) {
                 timerSeconds.textContent = '0' + timer.seconds;
             }
-
             if (timer.minutes < 10) {
                 timerMinutes.textContent = '0' + timer.minutes;
             }
-
             if (timer.hours < 10) {
                 timerHours.textContent = '0' + timer.hours;
             }
-
             if (timer.timeRemaining < 0) {
                 timerHours.textContent = '00';
                 timerMinutes.textContent = '00';
                 timerSeconds.textContent = '00';
             }
         }
-        //const setIntr = setInterval(() => { updateClock(); }, 1000);  
+
         setInterval(() => {
-            if (timerHours.textContent === '00' && timerMinutes.textContent === '00' && timerSeconds.textContent === '00') {
-                //clearInterval(setIntr);
+            if (timerHours.textContent === '00' &&
+                timerMinutes.textContent === '00' &&
+                timerSeconds.textContent === '00') {
                 return;
             }
             updateClock();
         }, 1000);
 
-        /*
-        let count = 0;
-        const myFunc = () => {
-            count++;
-            console.log(count);
-        };
-
-        setInterval(() => {
-            myFunc();
-        }, 1000);
-        */
-        //updateClock();
     }
-    countTimer('06 july 2020');
+    countTimer('04 july 2020');
 });
