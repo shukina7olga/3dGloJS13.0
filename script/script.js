@@ -77,17 +77,43 @@ window.addEventListener('DOMContentLoaded', () => {
     const togglePopUp = () => {
         const popup = document.querySelector('.popup'),
             popupBtn = document.querySelectorAll('.popup-btn'),
-            popUpClose = document.querySelector('.popup-close');
+            popUpClose = document.querySelector('.popup-close'),
+            popupContent = document.querySelector('.popup-content');
 
         popupBtn.forEach(elem => {
             elem.addEventListener('click', () => {
                 popup.style.display = 'block';
+                //Animation popup
+                const start = Date.now();
+
+                const topAnimate = (timeAnimate => {
+                    popupContent.style.top = timeAnimate / 17 + 'px';
+                });
+
+                const timer = setInterval(() => {
+                    const timeAnimate = Date.now() - start;
+                    if (timeAnimate >= 2500 || document.documentElement.clientWidth < 769) {
+                        clearInterval(timer); // закончить анимацию через 2,5 секунды
+                        return;
+                    }
+                    topAnimate(timeAnimate);
+                }, 20); //изменять положение каждые 20ms
+
             });
         });
 
         popUpClose.addEventListener('click', () => {
             popup.style.display = 'none';
         });
+
+
     };
     togglePopUp();
 });
+/*
+           if (count === 1) {
+                popupContent.style.transform = 'skewX(10deg)';
+            } else if (count === 2) {
+                popupContent.style.transform = 'skewX(-10deg)';
+            }
+*/
