@@ -77,7 +77,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const togglePopUp = () => {
         const popup = document.querySelector('.popup'),
             popupBtn = document.querySelectorAll('.popup-btn'),
-            popUpClose = document.querySelector('.popup-close'),
             popupContent = document.querySelector('.popup-content');
 
         popupBtn.forEach(elem => {
@@ -102,11 +101,18 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        popUpClose.addEventListener('click', () => {
-            popup.style.display = 'none';
+        popup.addEventListener('click', event => {
+            let target = event.target;
+            if (target.classList.contains('popup-close')) {
+                popup.style.display = 'none';
+            } else {
+                target = target.closest('.popup-content');
+                console.log(target);
+                if (!target) {
+                    popup.style.display = 'none';
+                }
+            }
         });
-
-
     };
     togglePopUp();
 
@@ -116,7 +122,7 @@ window.addEventListener('DOMContentLoaded', () => {
             tab = tabHeader.querySelectorAll('.service-header-tab'),
             tabContent = document.querySelectorAll('.service-tab');
 
-        const toggleTabContent = index => { // меняет контент. передаем индекс таба.  (перебирает табы, наход соответствующий, остальные скрывает)
+        const toggleTabContent = index => { //меняет контент.перед инд табаперебирает табы, наход соответст,осталь скрыв
             for (let i = 0; i < tabContent.length; i++) {
                 if (index === i) {
                     tab[i].classList.add('active');
@@ -130,17 +136,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
         tabHeader.addEventListener('click', event => {
             let target = event.target; // получили элемент, на который кликнули
-            while (target !== tabHeader) { // ЧАСТНЫЙ СЛУЧАЙ. ПО ТЕКСТУ В SPAN КЛИК НЕ РАБОТАЕТ. РЕШЕНИЕ
-                if (target.classList.contains('service-header-tab')) { // действительно кликнули по нашему табу? ИМЕЕТСЯ ЛИ У TARGET КЛАСС service-header-tab
-                    // eslint-disable-next-line no-loop-func
-                    tab.forEach((item, i) => { // проверка на какой  таб клик был
-                        if (item === target) {
-                            toggleTabContent(i);
-                        }
-                    });
-                    return;
-                }
-                target = target.parentNode; // таргету присвоили его родителя
+            target = target.closest('.service-header-tab');
+            if (target) { // действительно кликнули по нашему табу? ИМЕЕТСЯ ЛИ У TARGET КЛАСС service-header-tab
+                // eslint-disable-next-line no-loop-func
+                tab.forEach((item, i) => { // проверка на какой  таб клик был
+                    if (item === target) {
+                        toggleTabContent(i);
+                    }
+                });
             }
         });
     };
