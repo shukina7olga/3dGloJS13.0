@@ -109,11 +109,41 @@ window.addEventListener('DOMContentLoaded', () => {
 
     };
     togglePopUp();
-});
-/*
-           if (count === 1) {
-                popupContent.style.transform = 'skewX(10deg)';
-            } else if (count === 2) {
-                popupContent.style.transform = 'skewX(-10deg)';
+
+    //Tabs
+    const tabs = () => {
+        const tabHeader = document.querySelector('.service-header'),
+            tab = tabHeader.querySelectorAll('.service-header-tab'),
+            tabContent = document.querySelectorAll('.service-tab');
+
+        const toggleTabContent = index => { // меняет контент. передаем индекс таба.  (перебирает табы, наход соответствующий, остальные скрывает)
+            for (let i = 0; i < tabContent.length; i++) {
+                if (index === i) {
+                    tab[i].classList.add('active');
+                    tabContent[i].classList.remove('d-none');
+                }  else {
+                    tab[i].classList.remove('active');
+                    tabContent[i].classList.add('d-none');
+                }
             }
-*/
+        };
+
+        tabHeader.addEventListener('click', event => {
+            let target = event.target; // получили элемент, на который кликнули
+            while (target !== tabHeader) { // ЧАСТНЫЙ СЛУЧАЙ. ПО ТЕКСТУ В SPAN КЛИК НЕ РАБОТАЕТ. РЕШЕНИЕ
+                if (target.classList.contains('service-header-tab')) { // действительно кликнули по нашему табу? ИМЕЕТСЯ ЛИ У TARGET КЛАСС service-header-tab
+                    // eslint-disable-next-line no-loop-func
+                    tab.forEach((item, i) => { // проверка на какой  таб клик был
+                        if (item === target) {
+                            toggleTabContent(i);
+                        }
+                    });
+                    return;
+                }
+                target = target.parentNode; // таргету присвоили его родителя
+            }
+        });
+    };
+    tabs();
+});
+
