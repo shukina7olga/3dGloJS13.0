@@ -72,4 +72,22 @@ window.addEventListener('DOMContentLoaded', () => {
         menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
     };
     toggleMenu();
+
+    //Popup
+    const togglePopUp = () => {
+        const popup = document.querySelector('.popup'),
+            popupBtn = document.querySelectorAll('.popup-btn'),
+            popUpClose = document.querySelector('.popup-close');
+
+        popupBtn.forEach(elem => {
+            elem.addEventListener('click', () => {
+                popup.style.display = 'block';
+            });
+        });
+
+        popUpClose.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+    };
+    togglePopUp();
 });
