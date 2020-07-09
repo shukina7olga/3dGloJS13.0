@@ -96,17 +96,17 @@ window.addEventListener('DOMContentLoaded', () => {
                 const start = Date.now();
 
                 const topAnimate = (timeAnimate => {
-                    popupContent.style.top = timeAnimate / 17 + 'px';
+                    popupContent.style.top = timeAnimate / 8 + 'px';
                 });
 
                 const timer = setInterval(() => {
                     const timeAnimate = Date.now() - start;
-                    if (timeAnimate >= 2500 || document.documentElement.clientWidth < 769) {
+                    if (timeAnimate >= 500 || document.documentElement.clientWidth < 769) {
                         clearInterval(timer); // закончить анимацию через 2,5 секунды
                         return;
                     }
                     topAnimate(timeAnimate);
-                }, 20); //изменять положение каждые 20ms
+                }, 10); //изменять положение каждые 20ms
 
             });
         });
@@ -162,11 +162,19 @@ window.addEventListener('DOMContentLoaded', () => {
     // Slider
     const slider = () => {
         const slide = document.querySelectorAll('.portfolio-item'),
-            dot = document.querySelectorAll('.dot'),
-            slider = document.querySelector('.portfolio-content');
+            slider = document.querySelector('.portfolio-content'),
+            portfolioDots = document.querySelector('.portfolio-dots');
 
         let currentSlide = 0, // порядок слайда
             interval;
+
+
+        for (let i = 0; i < slide.length; i++) {
+            const dot = document.createElement('li');
+            dot.className = 'dot';
+            portfolioDots.append(dot);
+        }
+        const dot = document.querySelectorAll('.dot');
 
         const prevSlide = (elem, index, strClass) => {
             elem[index].classList.remove(strClass);
@@ -245,6 +253,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 startSlide();
             }
         });
+
         startSlide(1500);
 
     };
