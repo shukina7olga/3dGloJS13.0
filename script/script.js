@@ -258,5 +258,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
     };
     slider();
+
+    //Command
+    const command = () => {
+        const commandPhoto = document.querySelectorAll('.command__photo');
+
+        commandPhoto.forEach(element => {
+            element.addEventListener('mouseenter', event => {
+                event.target.src = event.target.dataset.img;
+            });
+            element.addEventListener('mouseleave', event => {
+                event.dataremov
+            });
+        });
+    };
+    command();
 });
 
