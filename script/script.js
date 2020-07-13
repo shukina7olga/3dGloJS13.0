@@ -288,9 +288,12 @@ window.addEventListener('DOMContentLoaded', () => {
     //Сalculator
     const calculator = () => {
         //разрешаем ввод только цифр
-        const calcItem = document.querySelectorAll('.calc-item');
-        calcItem.forEach(element => {
-            element.value = element.value.replace(/[^0-9]gi/, '');
+        const calcBlock = document.querySelector('.calc-block');
+        calcBlock.addEventListener('input', event => {
+            const target = event.target;
+            if (target.closest('.calc-item')) {
+                event.target.value = event.target.value.replace(/[^0-9]/gi, '');
+            }
         });
     };
     calculator();
