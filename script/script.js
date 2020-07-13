@@ -117,7 +117,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 popup.style.display = 'none';
             } else {
                 target = target.closest('.popup-content');
-                console.log(target);
                 if (!target) {
                     popup.style.display = 'none';
                 }
@@ -286,17 +285,6 @@ window.addEventListener('DOMContentLoaded', () => {
     command();
 
     //Сalculator
-    /*    const validCalculator = () => {
-        const calcBlock = document.querySelector('.calc-block');
-        calcBlock.addEventListener('input', event => {
-            const target = event.target;
-            if (target.closest('.calc-item')) {
-                event.target.value = event.target.value.replace(/[^0-9]/gi, '');
-            }
-        });
-    };
-    validCalculator();*/
-
     const calculator = (price = 100) => {
         const calcBlock = document.querySelector('.calc-block'),
             calcType = document.querySelector('.calc-type'),
@@ -311,7 +299,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 dayValue = 1;
             const typeValue = calcType.options[calcType.selectedIndex].value,
                 squareValue = +calcSquare.value;
-            console.log(typeValue);
 
             if (calcCount.value > 1) {
                 countValue += (calcCount.value - 1) / 10;
@@ -329,6 +316,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
             totalValue.textContent = total;
         };
+
+        calcBlock.addEventListener('input', event => {
+            const target = event.target;
+            if (target.closest('.calc-square') || target.closest('.calc-count') || target.closest('.calc-day')) {
+                event.target.value = event.target.value.replace(/[^0-9]/gi, '');
+            }
+        });
 
         calcBlock.addEventListener('change', event => {
             const target = event.target;
