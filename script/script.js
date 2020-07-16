@@ -131,11 +131,15 @@ window.addEventListener('DOMContentLoaded', () => {
             tab = tabHeader.querySelectorAll('.service-header-tab'),
             tabContent = document.querySelectorAll('.service-tab');
 
+        tabContent[1].style.display = 'none';
+        tabContent[2].style.display = 'none';
+
         const toggleTabContent = index => { //меняет контент.перед инд табаперебирает табы, наход соответст,осталь скрыв
             for (let i = 0; i < tabContent.length; i++) {
                 if (index === i) {
                     tab[i].classList.add('active');
                     tabContent[i].classList.remove('d-none');
+                    tabContent[i].style.display = 'inline-flex';
                 }  else {
                     tab[i].classList.remove('active');
                     tabContent[i].classList.add('d-none');
@@ -314,7 +318,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 total = price * typeValue * squareValue * countValue * dayValue;
             }
 
-            totalValue.textContent = total;
+            totalValue.textContent = Math.ceil(total);
         };
 
         calcBlock.addEventListener('input', event => {
@@ -348,17 +352,23 @@ window.addEventListener('DOMContentLoaded', () => {
             loadMessage = 'Загрузка...',
             successMessage = 'Спасибо, мы скоро с Вами свяжемся!';
 
-        const form = document.getElementById('form1');
-        const statusMessage = document.createElement('div');
+        const form1 = document.getElementById('form1'),
+            form2 = document.getElementById('form2'),
+            form3 = document.getElementById('form3'),
+            userName = document.getElementsByName('user_name'),
+            userEmail = document.getElementsByName('user_email'),
+            userPhone = document.getElementsByName('user_phone'),
+            userMessage = document.getElementsByName('user_message');
 
+        const statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font=size: 2rem;';
 
-        form.addEventListener('submit', event => {
+        form1.addEventListener('submit', event => {
             event.preventDefault(); // чтобы не было перезагрузки стр
-            form.appendChild(statusMessage);
+            form1.appendChild(statusMessage);
             statusMessage.textContent = loadMessage;
             // получ данные с формы
-            const formData = new FormData(form);
+            const formData = new FormData(form1);
             const body = {};
             for (const val of formData.entries()) {
                 body[val[0]] = val[1];
@@ -371,6 +381,44 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        form2.addEventListener('submit', event => {
+            event.preventDefault();
+            form2.appendChild(statusMessage);
+            statusMessage.textContent = loadMessage;
+            const formData = new FormData(form2);
+            const body = {};
+            for (const val of formData.entries()) {
+                body[val[0]] = val[1];
+            }
+            // eslint-disable-next-line no-use-before-define
+            postData(body, () => {
+                statusMessage.textContent = successMessage;
+            }, () => {
+                statusMessage.textContent = errorMessage;
+            });
+        });
+
+
+        form3.addEventListener('submit', event => {
+            statusMessage.style.cssText = 'color: white;';
+            event.preventDefault();
+            form3.appendChild(statusMessage);
+            statusMessage.textContent = loadMessage;
+            const formData = new FormData(form3);
+            const body = {};
+            for (const val of formData.entries()) {
+                body[val[0]] = val[1];
+            }
+            // eslint-disable-next-line no-use-before-define
+            postData(body, () => {
+                statusMessage.textContent = successMessage;
+            }, () => {
+                statusMessage.textContent = errorMessage;
+            });
+        });
+
+
+
         const postData = (body, outputData, errorData) => {
             const request = new XMLHttpRequest();
 
@@ -380,6 +428,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
                 if (request.status === 200) {
                     outputData();
+                    userName.value = '';
+                    userEmail.value = '';
+                    userPhone.value = '';
+                    userMessage.value = '';
                 } else {
                     errorData(request.status);
                 }
