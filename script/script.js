@@ -363,6 +363,24 @@ window.addEventListener('DOMContentLoaded', () => {
         const statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font=size: 2rem;';
 
+        userName.forEach(element => {
+            element.addEventListener('input', function() {
+                this.value = this.value.replace(/([^А-ЯЁa-яё\s])|([A-Za-z])/gi, '');
+            });
+        });
+
+        userPhone.forEach(element => {
+            element.addEventListener('input', function() {
+                this.value = this.value.replace(/[^\+\d]/g, '');
+            });
+        });
+
+        userMessage.forEach(element => {
+            element.addEventListener('input', function() {
+                this.value = this.value.replace(/([^А-ЯЁa-яё\s])|([A-Za-z])/gi, '');
+            });
+        });
+
         form1.addEventListener('submit', event => {
             event.preventDefault(); // чтобы не было перезагрузки стр
             form1.appendChild(statusMessage);
@@ -397,7 +415,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 statusMessage.textContent = errorMessage;
             });
         });
-
 
         form3.addEventListener('submit', event => {
             statusMessage.style.cssText = 'color: white;';
