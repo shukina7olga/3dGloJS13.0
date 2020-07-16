@@ -371,7 +371,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         userPhone.forEach(element => {
             element.addEventListener('input', function() {
-                this.value = this.value.replace(/[^\+\d]/g, '');
+                this.value = this.value.replace(/[^+\d]/g, '');
             });
         });
 
