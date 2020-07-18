@@ -352,13 +352,13 @@ window.addEventListener('DOMContentLoaded', () => {
             loadMessage = 'Загрузка...',
             successMessage = 'Спасибо, мы скоро с Вами свяжемся!';
 
-        const form = document.querySelectorAll('form'),
+        const forms = document.querySelectorAll('form'),
             userName = document.getElementsByName('user_name'),
             userPhone = document.getElementsByName('user_phone'),
             userMessage = document.getElementsByName('user_message');
 
         const statusMessage = document.createElement('div');
-        statusMessage.style.cssText = 'font=size: 2rem;';
+        statusMessage.style.cssText = 'font=size: 2rem; color: white;';
 
         userName.forEach(element => {
             element.addEventListener('input', function() {
@@ -378,7 +378,8 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        form.forEach(element => {
+
+        forms.forEach(element => {
             element.addEventListener('submit', event => {
                 event.preventDefault(); // чтобы не было перезагрузки стр
                 element.appendChild(statusMessage);
@@ -392,20 +393,18 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-
         const postData = body => {
-            const request = new XMLHttpRequest();
 
             return new Promise((resolve, reject) => {
-
+                const request = new XMLHttpRequest();
                 request.addEventListener('readystatechange', () => {
                     if (request.readyState !== 4) {
                         return;
                     }
                     if (request.status === 200) {
-                        outputData();
+                        resolve();
                     } else {
-                        errorData(request.status);
+                        reject(request.status);
                     }
                 });
 
@@ -416,17 +415,18 @@ window.addEventListener('DOMContentLoaded', () => {
         };
         postData(body)
         .then(() => {
-            const inputs = form.querySelectorAll('input');
-            inputs.forEach(item => {item.value = '';});                
-    
-
+            const inputs = forms.querySelectorAll('input');
+            inputs.forEach(item => {item.value = '';});  
+            
             statusMessage.textContent = successMessage;
+    
         })
         .catch(() => {
-            const inputs = form.querySelectorAll('input');
+            const inputs = forms.querySelectorAll('input');
             inputs.forEach(item => {item.value = '';});
-    
+
             statusMessage.textContent = errorMessage;
+   
         });
     };
     sendForm();
