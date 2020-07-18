@@ -352,11 +352,8 @@ window.addEventListener('DOMContentLoaded', () => {
             loadMessage = 'Загрузка...',
             successMessage = 'Спасибо, мы скоро с Вами свяжемся!';
 
-        const form1 = document.getElementById('form1'),
-            form2 = document.getElementById('form2'),
-            form3 = document.getElementById('form3'),
+        const form = document.querySelectorAll('form'),
             userName = document.getElementsByName('user_name'),
-            userEmail = document.getElementsByName('user_email'),
             userPhone = document.getElementsByName('user_phone'),
             userMessage = document.getElementsByName('user_message');
 
@@ -381,85 +378,58 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        form1.addEventListener('submit', event => {
-            event.preventDefault(); // чтобы не было перезагрузки стр
-            form1.appendChild(statusMessage);
-            statusMessage.textContent = loadMessage;
-            // получ данные с формы
-            const formData = new FormData(form1);
-            const body = {};
-            for (const val of formData.entries()) {
-                body[val[0]] = val[1];
-            }
-            // eslint-disable-next-line no-use-before-define
-            postData(body, () => {
-                statusMessage.textContent = successMessage;
-            }, () => {
-                statusMessage.textContent = errorMessage;
-            });
-        });
-
-        form2.addEventListener('submit', event => {
-            event.preventDefault();
-            form2.appendChild(statusMessage);
-            statusMessage.textContent = loadMessage;
-            const formData = new FormData(form2);
-            const body = {};
-            for (const val of formData.entries()) {
-                body[val[0]] = val[1];
-            }
-            // eslint-disable-next-line no-use-before-define
-            postData(body, () => {
-                statusMessage.textContent = successMessage;
-            }, () => {
-                statusMessage.textContent = errorMessage;
-            });
-        });
-
-        form3.addEventListener('submit', event => {
-            statusMessage.style.cssText = 'color: white;';
-            event.preventDefault();
-            form3.appendChild(statusMessage);
-            statusMessage.textContent = loadMessage;
-            const formData = new FormData(form3);
-            const body = {};
-            for (const val of formData.entries()) {
-                body[val[0]] = val[1];
-            }
-            // eslint-disable-next-line no-use-before-define
-            postData(body, () => {
-                statusMessage.textContent = successMessage;
-            }, () => {
-                statusMessage.textContent = errorMessage;
+        form.forEach(element => {
+            element.addEventListener('submit', event => {
+                event.preventDefault(); // чтобы не было перезагрузки стр
+                element.appendChild(statusMessage);
+                statusMessage.textContent = loadMessage;
+                // получ данные с формы
+                const formData = new FormData(element);
+                const body = {};
+                for (const val of formData.entries()) {
+                    body[val[0]] = val[1];
+                }
             });
         });
 
 
-
-        const postData = (body, outputData, errorData) => {
+        const postData = body => {
             const request = new XMLHttpRequest();
 
-            request.addEventListener('readystatechange', () => {
-                if (request.readyState !== 4) {
-                    return;
-                }
-                if (request.status === 200) {
-                    outputData();
-                    userName.value = '';
-                    userEmail.value = '';
-                    userPhone.value = '';
-                    userMessage.value = '';
-                } else {
-                    errorData(request.status);
-                }
+            return new Promise((resolve, reject) => {
+
+                request.addEventListener('readystatechange', () => {
+                    if (request.readyState !== 4) {
+                        return;
+                    }
+                    if (request.status === 200) {
+                        outputData();
+                    } else {
+                        errorData(request.status);
+                    }
+                });
+
+                request.open('POST', './server.php');
+                request.setRequestHeader('Content-Type', 'application/json');
+                request.send(JSON.stringify(body));
             });
-
-            request.open('POST', './server.php');
-            request.setRequestHeader('Content-Type', 'application/json');
-
-            request.send(JSON.stringify(body));
         };
+        postData(body)
+        .then(() => {
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(item => {item.value = '';});                
+    
+
+            statusMessage.textContent = successMessage;
+        })
+        .catch(() => {
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(item => {item.value = '';});
+    
+            statusMessage.textContent = errorMessage;
+        });
     };
     sendForm();
 });
 
+// outputData, errorData
