@@ -397,9 +397,17 @@ window.addEventListener('DOMContentLoaded', () => {
                     });
 
                 };
+
+                const removeMessage = () => {
+                    setTimeout(() => {
+                        statusMessage.remove();
+                    }, 5000);
+                };
+
                 postData(body)
                 .then((response) => {
-                    clearInput(forms);
+                    clearInput();
+                    removeMessage();
                     if (response.status !== 200) {
                         throw new Error('status network not 200');
                     }
@@ -408,7 +416,8 @@ window.addEventListener('DOMContentLoaded', () => {
             
                 })
                 .catch(error => {
-                    clearInput(forms);
+                    clearInput();
+                    removeMessage();
                     statusMessage.textContent = errorMessage;
                     console.log(error);
                 });
