@@ -383,15 +383,32 @@ window.addEventListener('DOMContentLoaded', () => {
             element.addEventListener('submit', event => {
                 event.preventDefault(); // чтобы не было перезагрузки стр
                 element.appendChild(statusMessage);
-                statusMessage.textContent = loadMessage;
-                // получ данные с формы
                 const formData = new FormData(element);
                 const body = {};
-                for (const val of formData.entries()) {
-                    body[val[0]] = val[1];
-                }
+                formData.forEach((val, key) => {
+                    body[key] = val;
+                });
+                statusMessage.textContent = loadMessage;
+
+                const clearInput = () => {
+                    forms.forEach(e => {
+                        const inputs = e.querySelectorAll('input');
+                        inputs.forEach(item => {item.value = '';});                        
+                    });
+                };
+                postData(body)
+                .then(() => { 
+                    clearInput();
+                    statusMessage.textContent = successMessage;
+                })
+                .catch(error => {
+                    clearInput();
+                    statusMessage.textContent = errorMessage;
+                });
             });
         });
+
+
 
         const postData = body => {
 
@@ -413,21 +430,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 request.send(JSON.stringify(body));
             });
         };
-        postData(body)
-        .then(() => {
-            const inputs = forms.querySelectorAll('input');
-            inputs.forEach(item => {item.value = '';});  
-            
-            statusMessage.textContent = successMessage;
-    
-        })
-        .catch(() => {
-            const inputs = forms.querySelectorAll('input');
-            inputs.forEach(item => {item.value = '';});
 
-            statusMessage.textContent = errorMessage;
-   
-        });
     };
     sendForm();
 });
