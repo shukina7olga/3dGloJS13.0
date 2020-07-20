@@ -11,7 +11,7 @@ const countTimer = deadline => {
             seconds = Math.floor(timeRemaining % 60),
             minutes = Math.floor((timeRemaining / 60) % 60),
             hours = Math.floor(timeRemaining / 60 / 60);
-        console.log(`секунды ${seconds}    минуты ${minutes}   часы ${hours} `);
+        //console.log(`секунды ${seconds}    минуты ${minutes}   часы ${hours} `);
         return { timeRemaining, hours, minutes, seconds };
     };
 
@@ -22,7 +22,7 @@ const countTimer = deadline => {
         timerMinutes.textContent = timer.minutes;
         timerSeconds.textContent = timer.seconds;
         count++;
-        console.log(count);
+        //console.log(count);
 
         if (timer.seconds < 10) {
             timerSeconds.textContent = '0' + timer.seconds;
